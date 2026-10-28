@@ -316,3 +316,72 @@ main { max-width:1440px; margin:0 auto; padding:0 30px 80px; }
  .schedule-poster,.schedule-poster img { min-height:115px; }
  .schedule-card-bottom { flex-direction:column; align-items:flex-start; }
 }
+
+
+/* Discover catalogue layout — AniScroll purple theme */
+.discover-main { padding-top:30px; }
+.discover-experience { max-width:1380px; margin:0 auto; }
+.discover-heading-row { display:flex; align-items:flex-end; justify-content:space-between; gap:24px; margin:12px 0 25px; }
+.discover-heading-row h1 { margin:5px 0 8px; font-size:clamp(32px,4vw,43px); letter-spacing:-1.7px; }
+.discover-heading-row p { margin:0; color:var(--muted); font-size:13px; line-height:1.7; }
+.discover-total { display:flex; flex-direction:column; align-items:flex-end; padding:12px 16px; border:1px solid var(--line); border-radius:12px; background:linear-gradient(135deg,#171528,#101820); }
+.discover-total strong { color:#c4b5fd; font-size:23px; line-height:1.2; }
+.discover-total span { color:var(--muted); font-size:10px; margin-top:4px; }
+.discover-filter-panel { padding:18px; border:1px solid var(--line); border-radius:17px; background:linear-gradient(145deg,#101820,#0d1219); margin-bottom:28px; }
+.discover-filter-grid { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:10px; }
+.discover-filter { min-width:0; width:100%; min-height:42px; padding:10px 12px; border:1px solid var(--line); border-radius:9px; background:#17212b; color:#bfcbd8; outline:none; font-size:12px; }
+.discover-filter:focus { border-color:rgba(167,139,250,.7); box-shadow:0 0 0 3px rgba(167,139,250,.1); }
+.discover-filter option { background:#111820; color:#f3f8fa; }
+.discover-filter-search { grid-column:span 1; }
+.discover-filter-actions { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-top:15px; color:var(--muted); font-size:11px; }
+.discover-filter-actions>div { display:flex; gap:8px; }
+.discover-reset,.discover-apply { min-height:37px; padding:9px 14px; border-radius:9px; font-size:11px; font-weight:800; cursor:pointer; }
+.discover-reset { color:#c7b9f8; border:1px solid var(--line); background:#171c29; }
+.discover-reset:hover { border-color:rgba(167,139,250,.5); }
+.discover-apply { color:#100b1d; border:1px solid transparent; background:linear-gradient(135deg,#c4b5fd,#a78bfa); }
+.discover-apply:hover { filter:brightness(1.08); }
+.discover-results-heading { display:flex; justify-content:space-between; align-items:flex-end; gap:15px; margin:0 0 17px; }
+.discover-results-heading h2 { margin:0; font-size:23px; letter-spacing:-.7px; }
+.discover-results-heading p { margin:6px 0 0; color:var(--muted); font-size:11px; }
+.discover-view-toggle { display:flex; gap:5px; }
+.discover-view-toggle button { width:35px; height:34px; border:1px solid var(--line); border-radius:8px; background:#141c26; color:#94a3b8; cursor:pointer; font-size:18px; }
+.discover-view-toggle button.active { color:#d8ccff; background:rgba(167,139,250,.14); border-color:rgba(167,139,250,.55); }
+.discover-grid { gap:22px 16px; }
+.discover-card .poster-link { border-radius:10px; aspect-ratio:3/4.25; }
+.discover-card .anime-title { font-size:13px; }
+.discover-card .poster-score { color:#e5dcff; }
+.discover-grid.compact { grid-template-columns:repeat(8,minmax(0,1fr)); gap:17px 12px; }
+.discover-grid.compact .anime-title { font-size:11px; margin-top:7px; }
+.discover-grid.compact .anime-subtitle { font-size:9px; }
+.discover-no-poster { display:grid; place-items:center; height:100%; color:#c4b5fd; font-weight:850; }
+.discover-empty { margin-top:10px; }
+.discover-empty h3 { margin:0 0 8px; color:var(--text); }
+.discover-empty p { margin:0 0 17px; }
+.discover-bottom-note { margin-top:22px; color:#778794; font-size:10px; text-align:center; }
+.discover-bottom-note button { margin-left:6px; color:#c4b5fd; background:transparent; border:0; cursor:pointer; font-weight:750; }
+@media(max-width:1100px) {
+ .discover-filter-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
+ .discover-grid.compact { grid-template-columns:repeat(6,minmax(0,1fr)); }
+}
+@media(max-width:760px) {
+ .discover-main { padding-top:20px; }
+ .discover-heading-row { align-items:flex-start; margin-bottom:18px; }
+ .discover-heading-row h1 { font-size:32px; }
+ .discover-total { padding:9px 11px; }
+ .discover-total strong { font-size:19px; }
+ .discover-total span { max-width:70px; font-size:9px; }
+ .discover-filter-panel { padding:12px; margin-bottom:23px; }
+ .discover-filter-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+ .discover-filter { min-height:40px; padding:9px 8px; font-size:11px; }
+ .discover-filter-search { grid-column:span 2; }
+ .discover-filter-actions { align-items:flex-start; }
+ .discover-filter-actions>div { width:100%; }
+ .discover-filter-actions button { flex:1; }
+ .discover-results-heading h2 { font-size:20px; }
+ .discover-grid.compact { grid-template-columns:repeat(4,minmax(0,1fr)); }
+}
+@media(max-width:390px) {
+ .discover-heading-row { flex-direction:column; }
+ .discover-total { align-items:flex-start; }
+ .discover-grid.compact { grid-template-columns:repeat(3,minmax(0,1fr)); }
+}
