@@ -27,7 +27,16 @@ export function WatchExperience({ animeId, initialEpisode, initialAudio, episode
 
   return (
     <>
-      <VideoPlayer animeId={animeId} episodeNumber={episode} audio={audio} selectedProvider={selectedProvider} />
+      <VideoPlayer
+        animeId={animeId}
+        episodeNumber={episode}
+        audio={audio}
+        selectedProvider={selectedProvider}
+        onProviderFailure={() => {
+          // An iframe's cross-origin playback status is not observable reliably.
+          // Keep selection manual so switching providers never unexpectedly changes audio/episode.
+        }}
+      />
       <div style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr) auto", gap: 10, marginTop: 16, alignItems: "start" }}>
         <div>
           <div className="control-label" style={{ marginBottom: 5 }}>{title}</div>
