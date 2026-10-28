@@ -13,7 +13,7 @@ const statuses = ["RELEASING","FINISHED","NOT_YET_RELEASED","CANCELLED"];
 const selectClass = "discover-filter";
 function pretty(value?: string) { return value ? value.replaceAll("_"," ").toLowerCase().replace(/\b\w/g, c=>c.toUpperCase()) : "Unknown"; }
 
-export function DiscoverExperience({ anime }: Props) {
+export function Advanced searchExperience({ anime }: Props) {
   const [search,setSearch] = useState("");
   const [genre,setGenre] = useState("");
   const [season,setSeason] = useState("");
@@ -95,7 +95,7 @@ export function DiscoverExperience({ anime }: Props) {
   function reset() { setCurrentPage(1);setSearch("");setGenre("");setSeason("");setYear("");setFormat("");setStatus("");setLanguage("");setRating("");setSource("");setEpisodeRange("");setSort("DEFAULT"); }
   const activeFilters = [search,genre,season,year,format,status,language,rating,source,episodeRange].filter(Boolean).length;
   return <div className="discover-experience">
-    <div className="discover-heading-row"><div><div className="section-kicker">Find your next obsession</div><h1>Discover anime</h1><p>Explore popular picks, seasonal releases, and hidden gems.</p></div><div className="discover-total"><strong>{filtered.length}</strong><span>titles in this view</span></div></div>
+    <div className="discover-heading-row"><div><div className="section-kicker">ADVANCED SEARCH</div><h1>Advanced anime search</h1><p>Search the AniList catalogue using detailed filters.</p></div><div className="discover-total"><strong>{filtered.length}</strong><span>titles in this view</span></div></div>
     <section className="discover-filter-panel" aria-label="Anime filters">
       <div className="discover-filter-grid">
         <input className={selectClass+" discover-filter-search"} value={search} onChange={e=>{setCurrentPage(1);setSearch(e.target.value)}} placeholder="Search anime titles…" aria-label="Search anime titles"/>
@@ -112,9 +112,9 @@ export function DiscoverExperience({ anime }: Props) {
       </div>
       <div className="discover-filter-actions"><span>{activeFilters ? `${activeFilters} filter${activeFilters===1?"":"s"} applied` : "Refine your anime list"}</span><div><button type="button" className="discover-reset" onClick={reset}>Reset filters</button><span className="discover-result-count">{filtered.length} results</span></div></div>
     </section>
-    {loadingPage && <p role="status" className="discover-loading">Loading matching anime from AniList…</p>}{loadError && <p role="alert" className="discover-error">{loadError}</p>}<div className="discover-results-heading"><div><h2>{search || genre ? "Matching anime" : "Explore anime"}</h2><p>Titles and artwork provided by AniList.</p></div><div className="discover-view-toggle"><button type="button" className={view==="grid"?"active":""} onClick={()=>setView("grid")} aria-label="Grid view">▦</button><button type="button" className={view==="compact"?"active":""} onClick={()=>setView("compact")} aria-label="Compact view">☷</button></div></div>
+    {loadingPage && <p role="status" className="discover-loading">Loading matching anime from AniList…</p>}{loadError && <p role="alert" className="discover-error">{loadError}</p>}<div className="discover-results-heading"><div><h2>{search || genre ? "Matching anime" : "Search results"}</h2><p>Titles and artwork provided by AniList.</p></div><div className="discover-view-toggle"><button type="button" className={view==="grid"?"active":""} onClick={()=>setView("grid")} aria-label="Grid view">▦</button><button type="button" className={view==="compact"?"active":""} onClick={()=>setView("compact")} aria-label="Compact view">☷</button></div></div>
     {filtered.length ? <div className={`anime-grid discover-grid ${view==="compact"?"compact":""}`}>{filtered.map(item=><article className="anime-card discover-card" key={item.id}><Link className="poster-link" href={`/anime/${item.id}`} aria-label={`View ${item.title}`}>{item.coverImage ? <img src={item.coverImage} alt={item.title} loading="lazy"/> : <div className="discover-no-poster">AniScroll</div>}<div className="poster-gradient"/>{item.score ? <span className="poster-score">★ {item.score.toFixed(1)}</span>:null}<span className="poster-format">{pretty(item.format)}</span></Link><Link className="anime-title" href={`/anime/${item.id}`}>{item.title}</Link><div className="anime-subtitle">{[item.year,item.episodes ? `${item.episodes} eps` : null,pretty(item.status)].filter(Boolean).join(" · ")}</div></article>)}</div> : <div className="empty-state discover-empty"><h3>No matching anime on this page</h3><p>Try changing or clearing filters, or navigate to another page.</p><button className="discover-apply" onClick={reset}>Clear filters</button></div>}
-    <nav className="discover-pagination" aria-label="Discover pages">
+    <nav className="discover-pagination" aria-label="Advanced search pages">
       {loadError ? <p role="alert">{loadError}</p> : null}
       <button type="button" className="discover-page-button" onClick={() => goToPage(currentPage - 1)} disabled={currentPage === 1 || loadingPage}>Previous</button>
       <span className="discover-page-status">{loadingPage ? "Loading…" : `Page ${currentPage}`}</span>
