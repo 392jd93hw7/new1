@@ -1,10 +1,9 @@
 import Link from "next/link";
-import { Search, House, CalendarDays, Flame, Clapperboard } from "lucide-react";
+import { House, CalendarDays, Flame, Clapperboard } from "lucide-react";
 import { SearchBar } from "@/components/search/SearchBar";
 
 const links = [
   { href: "/", label: "Home" },
-  { href: "/advanced-search", label: "Advanced Search" },
   { href: "/trending", label: "Trending" },
   { href: "/schedule", label: "Schedule" }
 ];
@@ -26,7 +25,6 @@ export function Navbar() {
       </header>
       <nav className="mobile-bottom-nav" aria-label="Mobile navigation">
         <Link href="/"><House size={18} /><span>Home</span></Link>
-        <Link href="/advanced-search"><Search size={18} /><span>Search</span></Link>
         <Link href="/trending"><Flame size={18} /><span>Trending</span></Link>
         <Link href="/schedule"><CalendarDays size={18} /><span>Schedule</span></Link>
       </nav>
