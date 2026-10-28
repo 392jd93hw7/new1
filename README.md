@@ -7,7 +7,7 @@ A Next.js + TypeScript + Tailwind foundation for a responsive anime discovery an
 - Debounced live search dropdown
 - SEO metadata on home, search, anime details and episode pages
 - Kitsu best-effort episode title/thumbnail lookup
-- Separate Sub/Dub buttons and server buttons for AniEmbed, NovusCloud and ZokoAnime
+- Separate Sub/Dub buttons and server buttons for AniEmbed, NovusCloud, and ZokoAnime
 - Manual server switching and a best-effort fallback action
 - Mobile navigation and responsive dark UI
 
@@ -19,13 +19,18 @@ npm run dev
 ```
 Open http://localhost:3000.
 
-## Provider setup
-Set `NEXT_PUBLIC_ANIEMBED_EMBED_TEMPLATE`, `NEXT_PUBLIC_NOVUSCLOUD_EMBED_TEMPLATE`, and `NEXT_PUBLIC_ZOKOANIME_EMBED_TEMPLATE` to their current documented embed URL templates, only where you are authorized to embed content. The adapters support placeholders `{id}`, `{episode}`, and `{audio}` (sub/dub). Templates are intentionally not guessed in code because provider routes and parameters can change. Never put an ad/redirect landing URL in a player template.
+## Streaming embed URLs
+The current defaults are set from the URL formats provided for this project:
+- AniEmbed: `https://aniembed.se/e/{ANILIST_ID}/{EPISODE}?lang={audio}`
+- NovusCloud: `https://novuscloud.buzz/embed/ani/{anilist_id}/{episode}/{type}`
+- ZokoAnime: `https://zokoanime.video/stream/ani/{anilist_id}/{episode}/{audio}?color=a78bfa`
+
+The adapters replace the AniList ID, episode number, and selected audio value (`sub` or `dub`). You can override the templates with the optional environment variables in `.env.example`.
 
 ## Important limitations
-Cross-origin iframe sandboxing means the app can observe that an iframe loaded, but usually cannot inspect the player’s internal playback state or internal redirects. Consequently, fallback is best-effort and user-assisted; it cannot be guaranteed for every provider error. The site cannot guarantee a provider is ad-free or remove behavior controlled by a third-party player. Prefer documented, authorized ad-free embed modes when available.
+The app embeds the provider URL as given; it does not control advertising, redirects, playback, or availability inside third-party providers. Cross-origin iframe restrictions mean the app cannot reliably inspect a provider's internal playback state or stop its internal ad redirects. If a provider's embed page itself redirects to ads, the reliable solution is a provider-supported ad-free embed mode or a different authorized provider—not a client-side redirect blocker.
 
 Kitsu matching is fuzzy/best-effort; alternate titles, seasons, specials and OVAs can differ in numbering and may require curated mapping. The weekly schedule page is currently a placeholder.
 
 ## Deployment
-Import this repository in Vercel, keep the Next.js defaults, configure provider templates in project environment variables, then redeploy. Do not put private API secrets in `NEXT_PUBLIC_*` values.
+Import this repository in Vercel, configure `NEXT_PUBLIC_SITE_URL` if needed, and deploy. If overriding provider templates, add the optional template variables in Vercel and redeploy.
