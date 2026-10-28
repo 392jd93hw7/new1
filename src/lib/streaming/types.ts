@@ -1,7 +1,8 @@
 export type AudioType = "sub" | "dub";
-export type ProviderId = "aniembed";
+export type ProviderId = "aniembed" | "anixo" | "yenime";
 
 export interface StreamRequest {
+  /** AniList media ID (used by all three embed providers). */
   animeId: number;
   episodeNumber: number;
   audio: AudioType;
@@ -11,8 +12,8 @@ export interface StreamProvider {
   id: ProviderId;
   label: string;
   /**
-   * Returns a documented embed/player URL if that provider has a configured
-   * URL template. Empty means not configured; never invent a stream URL.
+   * Builds the provider's embed URL. Returns null only when a provider has
+   * explicitly been disabled by configuration.
    */
   buildEmbedUrl(request: StreamRequest): string | null;
 }
