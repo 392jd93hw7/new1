@@ -104,6 +104,6 @@ export function DiscoverExperience({ anime }: Props) {
       <span className="discover-page-status">{loadingPage ? "Loading…" : `Page ${currentPage}`}</span>
       <button type="button" className="discover-page-button" onClick={() => goToPage(currentPage + 1)} disabled={!hasNextPage || loadingPage}>Next</button>
     </nav>
-    <p className="discover-page-caption">30 anime per page · navigate through AniList's catalogue</p>
+    <p className="discover-page-caption">30 anime per page · navigate through the AniList catalogue</p>
   </div>;
 }
