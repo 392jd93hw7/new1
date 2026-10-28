@@ -18,11 +18,12 @@ function formatTime(timestamp: number) {
   return new Intl.DateTimeFormat(undefined, { hour: "numeric", minute: "2-digit" }).format(new Date(timestamp * 1000));
 }
 function Countdown({ airingAt }: { airingAt: number }) {
-  const [now, setNow] = useState(() => Date.now());
+  const [now, setNow] = useState<number | null>(null);
   useEffect(() => {
     const timer = window.setInterval(() => setNow(Date.now()), 1000);
     return () => window.clearInterval(timer);
   }, []);
+  if (now === null) return <span className="schedule-countdown"><Clock3 size={12}/>Calculating…</span>;
   const seconds = Math.max(0, Math.floor(airingAt - now / 1000));
   if (!seconds) return <span className="schedule-live"><Radio size={12}/> Airing now / aired</span>;
   const days = Math.floor(seconds / 86400);
@@ -35,7 +36,7 @@ function Countdown({ airingAt }: { airingAt: number }) {
 export function ScheduleExperience({ initialEntries, initialWeek }: { initialEntries: AiringEntry[]; initialWeek: string }) {
   const [entries] = useState(initialEntries);
   const [weekStart, setWeekStart] = useState(() => startOfWeek(new Date(initialWeek)));
-  const [selectedDay, setSelectedDay] = useState(() => dateKey(new Date()));
+  const [selectedDay, setSelectedDay] = useState(() => dateKey(new Date(initialWeek)));
   const days = useMemo(() => Array.from({ length: 7 }, (_, index) => {
     const date = new Date(weekStart);
     date.setDate(weekStart.getDate() + index);
@@ -45,8 +46,9 @@ export function ScheduleExperience({ initialEntries, initialWeek }: { initialEnt
   const effectiveDay = inWeek ? selectedDay : dateKey(days[0]);
   const selectedDate = days.find(day => dateKey(day) === effectiveDay) || days[0];
   const dayEntries = entries.filter(item => dateKey(new Date(item.airingAt * 1000)) === effectiveDay);
-  const todayKey = dateKey(new Date());
-  const isCurrentWeek = dateKey(startOfWeek(new Date())) === dateKey(weekStart);
+  const [todayKey, setTodayKey] = useState(() => dateKey(new Date(initialWeek)));
+  useEffect(() => { setTodayKey(dateKey(new Date())); }, []);
+  const isCurrentWeek = dateKey(startOfWeek(new Date(initialWeek))) === dateKey(weekStart);
   const isToday = effectiveDay === todayKey;
 
   return <div className="schedule-page">
