@@ -13,7 +13,7 @@ const statuses = ["RELEASING","FINISHED","NOT_YET_RELEASED","CANCELLED"];
 const selectClass = "discover-filter";
 function pretty(value?: string) { return value ? value.replaceAll("_"," ").toLowerCase().replace(/\b\w/g, c=>c.toUpperCase()) : "Unknown"; }
 
-export function Advanced searchExperience({ anime }: Props) {
+export function DiscoverExperience({ anime }: Props) {
   const [search,setSearch] = useState("");
   const [genre,setGenre] = useState("");
   const [season,setSeason] = useState("");
