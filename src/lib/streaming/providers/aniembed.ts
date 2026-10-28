@@ -1,13 +1,5 @@
 import type { StreamProvider } from "../types";
 
-/**
- * Configure an embed URL template only after confirming it matches the
- * provider's current official documentation and your authorization to embed.
- * Supported placeholders: {id}, {episode}, {audio}.
- *
- * Example template format is intentionally not hard-coded: providers can
- * change routes and query parameters, and a guessed URL would be unreliable.
- */
 export const aniembedProvider: StreamProvider = {
   id: "aniembed",
   label: "AniEmbed",
