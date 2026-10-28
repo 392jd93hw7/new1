@@ -1,0 +1,5 @@
+import type {Metadata} from "next";
+import {Navbar} from "@/components/layout/Navbar";
+import {Footer} from "@/components/layout/Footer";
+export const metadata:Metadata={title:"About AniScroll",description:"About AniScroll and its integrations."};
+export default function AboutPage(){return <div className="page-shell"><Navbar/><main><section className="section" style={{maxWidth:780,paddingTop:35}}><div className="section-kicker">About the project</div><h1 style={{fontSize:38,letterSpacing:"-1.4px"}}>AniScroll</h1><p style={{color:"#c0c5d3",lineHeight:1.9}}>AniScroll is an anime discovery interface. Anime metadata comes from AniList, with episode details requested from Kitsu when a likely match is found. Streaming embeds, when configured, are provided by third-party services.</p><div className="notice">Third-party players control their own playback, advertisement behavior, redirects and uptime. AniScroll cannot guarantee external embeds are advertisement-free. Use only providers and content you are authorized to embed.</div></section></main><Footer/></div>}
