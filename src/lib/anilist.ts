@@ -126,3 +126,30 @@ export async function getAnimeSearchPage(search: string): Promise<Anime[]> {
   const data = await graphql<{ Page: { media: AniListMedia[] } }>(query, { search });
   return data.Page.media.map(toAnime);
 }
+
+
+export interface AiringEntry {
+  id: number;
+  airingAt: number;
+  timeUntilAiring: number;
+  episode: number;
+  media: Anime;
+}
+
+export async function getAiringSchedule(from: number, to: number): Promise<AiringEntry[]> {
+  const query = `query ($from: Int, $to: Int) {
+    Page(page: 1, perPage: 50) {
+      airingSchedules(airingAt_greater: $from, airingAt_lesser: $to, sort: TIME) {
+        id airingAt timeUntilAiring episode
+        media {
+          id title { romaji english native }
+          description(asHtml: false)
+          coverImage { extraLarge large medium }
+          bannerImage averageScore seasonYear season format episodes status genres siteUrl
+        }
+      }
+    }
+  }`;
+  const data = await graphql<{ Page: { airingSchedules: (Omit<AiringEntry, "media"> & { media: AniListMedia })[] } }>(query, { from, to });
+  return data.Page.airingSchedules.map((item) => ({ ...item, media: toAnime(item.media) }));
+}
