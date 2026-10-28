@@ -26,28 +26,31 @@ export function WatchExperience({ animeId, initialEpisode, initialAudio, episode
   );
 
   return (
-    <>
-      <VideoPlayer animeId={animeId} episodeNumber={episode} audio={audio} selectedProvider={selectedProvider} />
-      <div style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr) auto", gap: 10, marginTop: 16, alignItems: "start" }}>
-        <div>
-          <div className="control-label" style={{ marginBottom: 5 }}>{title}</div>
-          <div style={{ fontSize: 12, color: "#b7bdcc" }}>Episode {episode}{selected ? `: ${selected.title}` : ""}</div>
+    <div className="watch-experience-grid">
+      <section className="watch-player-column">
+        <VideoPlayer animeId={animeId} episodeNumber={episode} audio={audio} selectedProvider={selectedProvider} />
+        <div className="watch-player-title-row">
+          <div className="watch-current-title">
+            <div className="watch-section-kicker">{title}</div>
+            <h2>Episode {episode}{selected ? <span> · {selected.title}</span> : null}</h2>
+          </div>
+          <span className="watch-audio-badge">{audio === "sub" ? "SUB · Japanese" : "DUB · English"}</span>
         </div>
-        <div className="meta-pill" style={{ fontSize: 10 }}>{audio.toUpperCase()}</div>
-      </div>
-      <div style={{ marginTop: 18 }}>
-        <PlayerControls
-          animeId={animeId}
-          episodeNumber={episode}
-          audio={audio}
-          selectedProvider={selectedProvider}
-          onAudioChange={handleAudio}
-          onProviderChange={handleProvider}
-        />
-      </div>
-      <div style={{ marginTop: 18 }}>
+        <div className="watch-toolbar">
+          <span className="watch-toolbar-label">Audio version & streaming server</span>
+          <PlayerControls
+            animeId={animeId}
+            episodeNumber={episode}
+            audio={audio}
+            selectedProvider={selectedProvider}
+            onAudioChange={handleAudio}
+            onProviderChange={handleProvider}
+          />
+        </div>
+      </section>
+      <div className="watch-episodes-column">
         <EpisodeList episodes={rows} selected={episode} onSelect={setEpisode} />
       </div>
-    </>
+    </div>
   );
 }
