@@ -385,3 +385,10 @@ main { max-width:1440px; margin:0 auto; padding:0 30px 80px; }
  .discover-total { align-items:flex-start; }
  .discover-grid.compact { grid-template-columns:repeat(3,minmax(0,1fr)); }
 }
+
+/* Discover catalogue pagination */
+.discover-load-more { display:flex; flex-direction:column; align-items:center; gap:10px; padding:32px 12px 18px; text-align:center; }
+.discover-load-more button { min-width:180px; }
+.discover-load-more button:disabled { opacity:.65; cursor:wait; }
+.discover-load-more p { color:var(--muted); font-size:12px; margin:0; }
+.discover-load-more span { color:var(--muted); font-size:10px; }
