@@ -74,7 +74,7 @@ export async function searchAnime(search: string, signal?: AbortSignal): Promise
   if (trimmed.length < 2) return [];
   const query = `query ($search: String) {
     Page(page: 1, perPage: 8) {
-      media(search: $search, type: ANIME, isAdult: false, sort: [SEARCH_MATCH, POPULARITY_DESC]) {
+      media(search: $search, type: ANIME, sort: [SEARCH_MATCH, POPULARITY_DESC]) {
         id title { romaji english native }
         coverImage { extraLarge large medium }
         seasonYear format averageScore
