@@ -1,0 +1,3 @@
+"use client";
+import type {AudioType} from "@/lib/streaming/types";
+export function AudioSelector({value,onChange}:{value:AudioType;onChange:(value:AudioType)=>void}){return <div className="control-panel"><div className="control-label">Audio version</div><div className="segmented" role="group" aria-label="Audio version"><button type="button" className={value==="sub"?"selected":""} aria-pressed={value==="sub"} onClick={()=>onChange("sub")}>SUB · Japanese</button><button type="button" className={value==="dub"?"selected":""} aria-pressed={value==="dub"} onClick={()=>onChange("dub")}>DUB · English</button></div></div>}
