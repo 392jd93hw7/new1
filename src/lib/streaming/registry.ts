@@ -13,8 +13,6 @@ export function getProvider(id: ProviderId) {
   return providers.find((provider) => provider.id === id) || null;
 }
 
-export function getReadyProviders() {
-  return providers.filter((provider) => Boolean(provider.buildEmbedUrl({
-    animeId: 1, episodeNumber: 1, audio: "sub"
-  })));
+export function getReadyProviders(animeId = 1, episodeNumber = 1, audio: "sub" | "dub" = "sub") {
+  return providers.filter((provider) => Boolean(provider.buildEmbedUrl({ animeId, episodeNumber, audio })));
 }
