@@ -26,11 +26,10 @@ export function DiscoverExperience({ anime }: Props) {
   const [episodeRange,setEpisodeRange] = useState("");
   const [sort,setSort] = useState("DEFAULT");
   const [view,setView] = useState<"grid"|"compact">("grid");
-  const [showAll,setShowAll] = useState(false);
   const [allAnime,setAllAnime] = useState<Anime[]>(anime);
-  const [nextPage,setNextPage] = useState(1);
+  const [currentPage,setCurrentPage] = useState(1);
   const [hasNextPage,setHasNextPage] = useState(true);
-  const [loadingMore,setLoadingMore] = useState(false);
+  const [loadingPage,setLoadingPage] = useState(false);
   const [loadError,setLoadError] = useState("");
 
   const filtered = useMemo(() => {
@@ -58,25 +57,22 @@ export function DiscoverExperience({ anime }: Props) {
     return result;
   },[allAnime,search,genre,season,year,format,status,language,rating,source,episodeRange,sort]);
 
-  async function loadMore() {
-    if (loadingMore || !hasNextPage) return;
-    setLoadingMore(true);
+  async function goToPage(page: number) {
+    if (page < 1 || loadingPage || page === currentPage) return;
+    setLoadingPage(true);
     setLoadError("");
     try {
-      const response = await fetch(`/api/discover?page=${nextPage}`);
+      const response = await fetch(`/api/discover?page=${page}`);
       if (!response.ok) throw new Error("AniList catalogue could not be loaded. Please try again.");
       const data = await response.json() as { anime: Anime[]; hasNextPage: boolean };
-      setAllAnime(current => {
-        const ids = new Set(current.map(item => item.id));
-        return [...current, ...data.anime.filter(item => !ids.has(item.id))];
-      });
-      setNextPage(current => current + 1);
+      setAllAnime(data.anime);
+      setCurrentPage(page);
       setHasNextPage(data.hasNextPage);
-      setShowAll(true);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (error) {
-      setLoadError(error instanceof Error ? error.message : "Unable to load more anime.");
+      setLoadError(error instanceof Error ? error.message : "Unable to load this page.");
     } finally {
-      setLoadingMore(false);
+      setLoadingPage(false);
     }
   }
 
@@ -101,11 +97,13 @@ export function DiscoverExperience({ anime }: Props) {
       <div className="discover-filter-actions"><span>{activeFilters ? `${activeFilters} filter${activeFilters===1?"":"s"} applied` : "Refine your anime list"}</span><div><button type="button" className="discover-reset" onClick={reset}>Reset filters</button><button type="button" className="discover-apply" onClick={()=>setShowAll(true)}>Show {filtered.length} results</button></div></div>
     </section>
     <div className="discover-results-heading"><div><h2>{search || genre ? "Matching anime" : "Explore anime"}</h2><p>Titles and artwork provided by AniList.</p></div><div className="discover-view-toggle"><button type="button" className={view==="grid"?"active":""} onClick={()=>setView("grid")} aria-label="Grid view">▦</button><button type="button" className={view==="compact"?"active":""} onClick={()=>setView("compact")} aria-label="Compact view">☷</button></div></div>
-    {filtered.length ? <div className={`anime-grid discover-grid ${view==="compact"?"compact":""}`}>{filtered.map(item=><article className="anime-card discover-card" key={item.id}><Link className="poster-link" href={`/anime/${item.id}`} aria-label={`View ${item.title}`}>{item.coverImage ? <img src={item.coverImage} alt={item.title} loading="lazy"/> : <div className="discover-no-poster">AniScroll</div>}<div className="poster-gradient"/>{item.score ? <span className="poster-score">★ {item.score.toFixed(1)}</span>:null}<span className="poster-format">{pretty(item.format)}</span></Link><Link className="anime-title" href={`/anime/${item.id}`}>{item.title}</Link><div className="anime-subtitle">{[item.year,item.episodes ? `${item.episodes} eps` : null,pretty(item.status)].filter(Boolean).join(" · ")}</div></article>)}</div> : <div className="empty-state discover-empty"><h3>No matching anime in this set</h3><p>Try changing or clearing filters. Try changing or clearing filters, or load more titles from AniList.</p><button className="discover-apply" onClick={reset}>Clear filters</button></div>}
-    <div className="discover-load-more">
+    {filtered.length ? <div className={`anime-grid discover-grid ${view==="compact"?"compact":""}`}>{filtered.map(item=><article className="anime-card discover-card" key={item.id}><Link className="poster-link" href={`/anime/${item.id}`} aria-label={`View ${item.title}`}>{item.coverImage ? <img src={item.coverImage} alt={item.title} loading="lazy"/> : <div className="discover-no-poster">AniScroll</div>}<div className="poster-gradient"/>{item.score ? <span className="poster-score">★ {item.score.toFixed(1)}</span>:null}<span className="poster-format">{pretty(item.format)}</span></Link><Link className="anime-title" href={`/anime/${item.id}`}>{item.title}</Link><div className="anime-subtitle">{[item.year,item.episodes ? `${item.episodes} eps` : null,pretty(item.status)].filter(Boolean).join(" · ")}</div></article>)}</div> : <div className="empty-state discover-empty"><h3>No matching anime on this page</h3><p>Try changing or clearing filters, or navigate to another page.</p><button className="discover-apply" onClick={reset}>Clear filters</button></div>}
+    <nav className="discover-pagination" aria-label="Discover pages">
       {loadError ? <p role="alert">{loadError}</p> : null}
-      {hasNextPage ? <button type="button" className="discover-apply" onClick={loadMore} disabled={loadingMore}>{loadingMore ? "Loading anime…" : "Load more anime"}</button> : <p>You've reached the end of AniList's available catalogue.</p>}
-      <span>{allAnime.length.toLocaleString()} anime loaded · results update as more titles are loaded</span>
-    </div>
+      <button type="button" className="discover-page-button" onClick={() => goToPage(currentPage - 1)} disabled={currentPage === 1 || loadingPage}>Previous</button>
+      <span className="discover-page-status">{loadingPage ? "Loading…" : `Page ${currentPage}`}</span>
+      <button type="button" className="discover-page-button" onClick={() => goToPage(currentPage + 1)} disabled={!hasNextPage || loadingPage}>Next</button>
+    </nav>
+    <p className="discover-page-caption">30 anime per page · navigate through AniList's catalogue</p>
   </div>;
 }
