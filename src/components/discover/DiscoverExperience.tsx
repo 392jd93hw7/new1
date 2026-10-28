@@ -26,7 +26,12 @@ export function DiscoverExperience({ anime }: Props) {
   const [episodeRange,setEpisodeRange] = useState("");
   const [sort,setSort] = useState("DEFAULT");
   const [view,setView] = useState<"grid"|"compact">("grid");
-  const [showAll,setShowAll] = useState(false);\n  const [allAnime,setAllAnime] = useState<Anime[]>(anime);\n  const [nextPage,setNextPage] = useState(1);\n  const [hasNextPage,setHasNextPage] = useState(true);\n  const [loadingMore,setLoadingMore] = useState(false);\n  const [loadError,setLoadError] = useState("");
+  const [showAll,setShowAll] = useState(false);
+  const [allAnime,setAllAnime] = useState<Anime[]>(anime);
+  const [nextPage,setNextPage] = useState(1);
+  const [hasNextPage,setHasNextPage] = useState(true);
+  const [loadingMore,setLoadingMore] = useState(false);
+  const [loadError,setLoadError] = useState("");
 
   const filtered = useMemo(() => {
     let result = allAnime.filter(item => {
