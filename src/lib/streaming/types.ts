@@ -1,5 +1,5 @@
 export type AudioType = "sub" | "dub";
-export type ProviderId = "aniembed" | "novuscloud" | "zokoanime";
+export type ProviderId = "aniembed";
 
 export interface StreamRequest {
   animeId: number;
