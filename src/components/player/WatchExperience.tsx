@@ -6,7 +6,6 @@ import type { AudioType, ProviderId } from "@/lib/streaming/types";
 import { VideoPlayer } from "./VideoPlayer";
 import { PlayerControls } from "./PlayerControls";
 import { EpisodeList } from "./EpisodeList";
-import { providers } from "@/lib/streaming/registry";
 
 export function WatchExperience({ animeId, initialEpisode, initialAudio, episodes, title }: {
   animeId: number;
