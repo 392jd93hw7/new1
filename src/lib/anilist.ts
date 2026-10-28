@@ -155,18 +155,53 @@ export async function getAiringSchedule(from: number, to: number): Promise<Airin
 }
 
 
-export async function getDiscoverAnimePage(page: number): Promise<{ anime: Anime[]; hasNextPage: boolean }> {
-  const query = `query ($page: Int) {
+export type DiscoverFilters = {
+  search?: string;
+  genre?: string;
+  season?: string;
+  year?: number;
+  format?: string;
+  status?: string;
+  rating?: string;
+  episodeRange?: string;
+  sort?: string;
+};
+
+export async function getDiscoverAnimePage(page: number, filters: DiscoverFilters = {}): Promise<{ anime: Anime[]; hasNextPage: boolean }> {
+  const query = `query (
+    $page: Int, $search: String, $genre: String, $season: MediaSeason,
+    $year: Int, $format: MediaFormat, $status: MediaStatus,
+    $score: Int, $episodesGreater: Int, $episodesLesser: Int, $sort: [MediaSort]
+  ) {
     Page(page: $page, perPage: 30) {
       pageInfo { hasNextPage }
-      media(type: ANIME, isAdult: false, sort: POPULARITY_DESC) {
+      media(
+        search: $search, genre: $genre, season: $season, seasonYear: $year,
+        format: $format, status: $status, averageScore_greater: $score,
+        episodes_greater: $episodesGreater, episodes_lesser: $episodesLesser,
+        type: ANIME, isAdult: false, sort: $sort
+      ) {
         ${MEDIA_FIELDS}
       }
     }
   }`;
-  const data = await graphql<{ Page: { pageInfo: { hasNextPage: boolean }; media: AniListMedia[] } }>(query, { page });
-  return {
-    anime: data.Page.media.map(toAnime),
-    hasNextPage: data.Page.pageInfo.hasNextPage
+  const variables = {
+    page,
+    search: filters.search?.trim() || null,
+    genre: filters.genre || null,
+    season: filters.season || null,
+    year: filters.year || null,
+    format: filters.format || null,
+    status: filters.status || null,
+    score: filters.rating === "TOP" ? 84 : filters.rating === "HIGH" ? 69 : null,
+    episodesGreater: filters.episodeRange === "MEDIUM" ? 12 : filters.episodeRange === "LONG" ? 26 : null,
+    episodesLesser: filters.episodeRange === "SHORT" ? 13 : filters.episodeRange === "MEDIUM" ? 27 : null,
+    sort: filters.sort === "SCORE" ? ["SCORE_DESC"] : filters.sort === "YEAR" ? ["START_DATE_DESC"] : filters.sort === "TITLE" ? ["TITLE_ROMAJI"] : ["POPULARITY_DESC"]
   };
+  const data = await graphql<{ Page: { pageInfo: { hasNextPage: boolean }; media: AniListMedia[] } }>(query, variables);
+  let anime = data.Page.media.map(toAnime);
+  if (filters.episodeRange === "SHORT") anime = anime.filter((item) => item.episodes != null && item.episodes <= 12);
+  if (filters.episodeRange === "MEDIUM") anime = anime.filter((item) => item.episodes != null && item.episodes >= 13 && item.episodes <= 26);
+  if (filters.episodeRange === "LONG") anime = anime.filter((item) => item.episodes != null && item.episodes >= 27);
+  return { anime, hasNextPage: data.Page.pageInfo.hasNextPage };
 }
