@@ -153,3 +153,20 @@ export async function getAiringSchedule(from: number, to: number): Promise<Airin
   const data = await graphql<{ Page: { airingSchedules: (Omit<AiringEntry, "media"> & { media: AniListMedia })[] } }>(query, { from, to });
   return data.Page.airingSchedules.map((item) => ({ ...item, media: toAnime(item.media) }));
 }
+
+
+export async function getDiscoverAnimePage(page: number): Promise<{ anime: Anime[]; hasNextPage: boolean }> {
+  const query = `query ($page: Int) {
+    Page(page: $page, perPage: 50) {
+      pageInfo { hasNextPage }
+      media(type: ANIME, isAdult: false, sort: POPULARITY_DESC) {
+        ${MEDIA_FIELDS}
+      }
+    }
+  }`;
+  const data = await graphql<{ Page: { pageInfo: { hasNextPage: boolean }; media: AniListMedia[] } }>(query, { page });
+  return {
+    anime: data.Page.media.map(toAnime),
+    hasNextPage: data.Page.pageInfo.hasNextPage
+  };
+}
